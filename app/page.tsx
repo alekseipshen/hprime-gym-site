@@ -105,16 +105,10 @@ export default function HomePage() {
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6">
               Factory-Trained Gym Equipment Professionals
             </h2>
-            <div className="flex flex-col md:flex-row items-center justify-center gap-8">
-              <div className="w-64">
-                <Image src="/certificates/epa.jpg" alt="EPA Certification" width={400} height={308} className="rounded-lg shadow-md" />
-                <p className="text-sm text-gray-600 mt-2">EPA Certification</p>
-              </div>
-              <div className="w-64">
-                <Image src="/certificates/whirlpool-training.jpg" alt="Factory Training Certificate" width={400} height={309} className="rounded-lg shadow-md" />
-                <p className="text-sm text-gray-600 mt-2">Factory Training Certificate</p>
-              </div>
-            </div>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Our technicians are factory-trained on all major gym equipment brands including
+              Life Fitness, Precor, NordicTrack, Peloton, Matrix, Cybex, and more.
+            </p>
           </div>
         </div>
       </section>

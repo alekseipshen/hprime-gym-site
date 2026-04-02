@@ -38,8 +38,8 @@ export default function TermsOfUsePage() {
                 and scheduling.
               </p>
               <p>
-                We repair all major brands of appliances including refrigerators, washers, dryers, 
-                dishwashers, ovens, and more. Service appointments, pricing, and availability are 
+                We repair all major brands of gym equipment including treadmills, ellipticals, stationary bikes,
+                rowing machines, stair machines, and more. Service appointments, pricing, and availability are
                 subject to change.
               </p>
             </section>
@@ -77,8 +77,8 @@ export default function TermsOfUsePage() {
               </p>
               <p>
                 Our liability is limited to the cost of the repair service provided. We are not 
-                liable for consequential or incidental damages including loss of business, food 
-                spoilage, or other indirect losses.
+                liable for consequential or incidental damages including loss of business, equipment
+                downtime, or other indirect losses.
               </p>
             </section>
 
@@ -86,7 +86,7 @@ export default function TermsOfUsePage() {
               <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">6. Independent Service Provider</h2>
               <p>
                 {BUSINESS_NAME} is an independent gym equipment repair service provider and is not 
-                affiliated with, authorized by, or endorsed by any appliance brand or manufacturer 
+                affiliated with, authorized by, or endorsed by any equipment brand or manufacturer 
                 mentioned on this website. All brand names and trademarks are the property of their 
                 respective owners and are used for informational purposes only.
               </p>

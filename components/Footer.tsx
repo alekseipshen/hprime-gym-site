@@ -32,7 +32,7 @@ export default function Footer() {
                 {BUSINESS_EMAIL}
               </a>
             </p>
-            <p className="text-sm mt-4">EPA Certified Technicians</p>
+            <p className="text-sm mt-4">Certified Technicians</p>
             <p className="text-sm">Factory Trained</p>
             <p className="text-sm">$69 Diagnostic Fee (credited toward repair)</p>
             <p className="text-sm mt-2">Mon-Fri: 8AM-6PM</p>
