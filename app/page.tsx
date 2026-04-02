@@ -5,7 +5,6 @@ import { appliances } from '@/lib/data/appliances';
 import { cities } from '@/lib/data/cities';
 import { CheckCircle, Clock, Users, Wrench } from 'lucide-react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { generateLocalBusinessSchema, generateFAQSchema } from '@/lib/seo/schema';
 
 const homepageFaqs = [
@@ -217,66 +216,6 @@ export default function HomePage() {
 
       {/* Reviews */}
       <Reviews />
-
-      {/* Watch Our Latest Work Tips */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Watch Our Latest Repair Tips
-            </h2>
-            <p className="text-lg text-gray-600">
-              Our work is transparent — here, you can see how we are working to do the best for you.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <div className="rounded-xl overflow-hidden shadow-lg">
-              <div className="relative pb-[56.25%]">
-                <iframe
-                  src="https://www.youtube.com/embed/x4Ftt6rVNQQ"
-                  title="Gym Equipment Repair Tips"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="absolute inset-0 w-full h-full"
-                  loading="lazy"
-                />
-              </div>
-              <div className="p-4 bg-gray-50">
-                <h3 className="font-semibold text-gray-900">Gym Equipment Repair Tips</h3>
-              </div>
-            </div>
-
-            <div className="rounded-xl overflow-hidden shadow-lg">
-              <div className="relative pb-[56.25%]">
-                <iframe
-                  src="https://www.youtube.com/embed/I-6kq0phckg"
-                  title="Treadmill Maintenance & Repair"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="absolute inset-0 w-full h-full"
-                  loading="lazy"
-                />
-              </div>
-              <div className="p-4 bg-gray-50">
-                <h3 className="font-semibold text-gray-900">Treadmill Maintenance & Repair</h3>
-              </div>
-            </div>
-          </div>
-
-          <div className="text-center mt-8">
-            <a
-              href="https://www.youtube.com/@MeToTarass"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block font-semibold text-lg hover:underline"
-              style={{ color: '#398ffc' }}
-            >
-              Watch more on our YouTube channel →
-            </a>
-          </div>
-        </div>
-      </section>
 
       {/* FAQ Section */}
       <section className="py-16 bg-gray-50">

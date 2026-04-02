@@ -219,13 +219,6 @@ export default function CommercialPage() {
                 key={service.slug}
                 className="bg-white rounded-lg shadow-md hover:shadow-xl transition overflow-hidden group border border-gray-100"
               >
-                <div className="w-full h-48 overflow-hidden">
-                  <img
-                    src={service.image}
-                    alt={service.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                </div>
                 <div className="p-6">
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">{service.title}</h3>
                   <p className="text-gray-600 mb-4 text-sm">{service.description}</p>
