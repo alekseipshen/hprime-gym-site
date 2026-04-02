@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { CheckCircle, Clock, Users, Wrench } from 'lucide-react';
 import Hero from '@/components/Hero';
+import Reviews from '@/components/Reviews';
 import SEOContent from '@/components/SEOContent';
 import BrandsSection from '@/components/BrandsSection';
 import { cities, getCitiesByCounty } from '@/lib/data/cities';
@@ -178,7 +179,10 @@ export default async function CityPage({ params }: PageProps) {
       {/* 5. Brands We Service */}
       <BrandsSection />
 
-      {/* 6. Nearby Cities */}
+      {/* 6. Reviews */}
+      <Reviews />
+
+      {/* 7. Nearby Cities */}
       {nearbyCities.length > 0 && (
         <section id="service-area" className="py-12 bg-gray-50">
           <div className="container mx-auto px-4 md:px-6 lg:px-8">
