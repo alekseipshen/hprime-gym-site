@@ -40,7 +40,7 @@ export default function PrivacyPolicyPage() {
               <ul className="list-disc pl-6 space-y-2">
                 <li>Name and contact information (email address, phone number, mailing address)</li>
                 <li>Service address (if different from contact address)</li>
-                <li>Appliance information and service history</li>
+                <li>Equipment information and service history</li>
                 <li>Payment information (processed securely through our payment processor)</li>
                 <li>Communications with us (emails, phone calls, text messages)</li>
               </ul>
