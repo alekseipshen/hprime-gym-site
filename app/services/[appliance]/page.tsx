@@ -8,6 +8,7 @@ import SEOContent from '@/components/SEOContent';
 import { appliances } from '@/lib/data/appliances';
 import { brands } from '@/lib/data/brands';
 import { getBrandsForAppliance } from '@/lib/data/serviceBrands';
+import { getEquipmentImage } from '@/lib/data/equipmentImages';
 import { generatePageMetadata } from '@/lib/seo/metadata';
 import { generateLocalBusinessSchema, generateServiceSchema, generateBreadcrumbSchema } from '@/lib/seo/schema';
 
@@ -166,35 +167,47 @@ export default async function ApplianceRepairPage({ params }: PageProps) {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 max-w-6xl mx-auto">
-            {relevantBrands.map((brand) => (
-              <Link
-                key={brand.slug}
-                href={`/brands/${brand.slug}-repair`}
-                prefetch={false}
-                className="group bg-gray-50 border border-gray-200 rounded-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden"
-              >
-                <div className="p-6 flex flex-col items-center text-center gap-4">
-                  {brand.logo ? (
-                    <div className="relative h-24 w-full flex items-center justify-center">
-                      <img 
-                        src={brand.logo} 
-                        alt={`${brand.name} logo`}
-                        className="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300"
+            {relevantBrands.map((brand) => {
+              const eqImage = getEquipmentImage(brand.slug, cleanSlug);
+              return (
+                <Link
+                  key={brand.slug}
+                  href={`/brands/${brand.slug}-repair`}
+                  prefetch={false}
+                  className="group bg-gray-50 border border-gray-200 rounded-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+                >
+                  {eqImage && (
+                    <div className="w-full h-36 overflow-hidden bg-white">
+                      <img
+                        src={eqImage.src}
+                        alt={`${brand.name} ${eqImage.equipmentName}`}
+                        className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300 p-2"
                       />
                     </div>
-                  ) : (
-                    <div className="h-24 w-full flex items-center justify-center">
-                      <span className="text-xl font-bold text-gray-900 transition-colors">
-                        {brand.name}
-                      </span>
-                    </div>
                   )}
-                  <span className="text-sm font-medium group-hover:underline" style={{ color: '#1B2A4A' }}>
-                    Learn more →
-                  </span>
-                </div>
-              </Link>
-            ))}
+                  <div className="p-4 flex flex-col items-center text-center gap-3">
+                    {brand.logo ? (
+                      <div className="relative h-16 w-full flex items-center justify-center">
+                        <img
+                          src={brand.logo}
+                          alt={`${brand.name} logo`}
+                          className="max-h-full max-w-full object-contain"
+                        />
+                      </div>
+                    ) : (
+                      <div className="h-16 w-full flex items-center justify-center">
+                        <span className="text-xl font-bold text-gray-900 transition-colors">
+                          {brand.name}
+                        </span>
+                      </div>
+                    )}
+                    <span className="text-sm font-medium group-hover:underline" style={{ color: '#1B2A4A' }}>
+                      Learn more →
+                    </span>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>

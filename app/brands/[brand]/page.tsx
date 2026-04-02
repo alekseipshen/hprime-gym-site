@@ -8,6 +8,7 @@ import SEOContent from '@/components/SEOContent';
 import { brands } from '@/lib/data/brands';
 import { appliances } from '@/lib/data/appliances';
 import { getAppliancesForBrand } from '@/lib/data/serviceBrands';
+import { getEquipmentImagesForBrand } from '@/lib/data/equipmentImages';
 import { generatePageMetadata } from '@/lib/seo/metadata';
 import { generateLocalBusinessSchema, generateServiceSchema, generateBreadcrumbSchema } from '@/lib/seo/schema';
 
@@ -54,7 +55,11 @@ export default async function BrandRepairPage({ params }: PageProps) {
   const localBusinessSchema = generateLocalBusinessSchema({ brand: cleanSlug });
   const serviceSchema = generateServiceSchema({ brand: cleanSlug });
   const breadcrumbSchema = generateBreadcrumbSchema({ brand: cleanSlug });
-  
+
+  // Get first available equipment image for this brand
+  const brandEquipmentImages = getEquipmentImagesForBrand(cleanSlug);
+  const brandHeroImage = brandEquipmentImages.length > 0 ? brandEquipmentImages[0].src : undefined;
+
   return (
     <>
       {/* JSON-LD Schema */}
@@ -70,12 +75,13 @@ export default async function BrandRepairPage({ params }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
-      
-      <Hero 
+
+      <Hero
         title={`Expert ${brand.name} Gym Equipment Repair in Denver Metro area`}
         subtitle="Factory-trained technicians • Genuine parts • Same-day service"
         brand={brand.name}
         brandLogo={brand.logo}
+        applianceImage={brandHeroImage}
       />
       
       {/* Equipment Section - Filtered */}

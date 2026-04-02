@@ -4,7 +4,7 @@ export const appliances = [
     name: 'Treadmill',
     title: 'Treadmill Repair',
     description: 'Expert treadmill repair for residential and commercial machines',
-    image: '/photos/scenes/scene-02.webp',
+    image: '/equipment/life-fitness/treadmill.webp',
     services: [
       'Belt slipping or misaligned',
       'Motor failure or overheating',
@@ -33,7 +33,7 @@ export const appliances = [
     name: 'Elliptical',
     title: 'Elliptical Repair',
     description: 'Professional elliptical machine repair and maintenance',
-    image: '/photos/scenes/scene-05.webp',
+    image: '/equipment/life-fitness/elliptical.webp',
     services: [
       'Resistance not adjusting',
       'Stride length issues',
@@ -61,7 +61,7 @@ export const appliances = [
     name: 'Stationary Bike',
     title: 'Stationary Bike Repair',
     description: 'Recumbent and upright stationary bike repair services',
-    image: '/photos/scenes/scene-07.webp',
+    image: '/equipment/peloton/stationary-bike.webp',
     services: [
       'Resistance knob not working',
       'Seat adjustment problems',
@@ -90,7 +90,7 @@ export const appliances = [
     name: 'Spin Bike',
     title: 'Spin Bike Repair',
     description: 'Peloton, Keiser, and indoor cycling bike repair services',
-    image: '/photos/scenes/scene-09.webp',
+    image: '/equipment/keiser/stationary-bike.webp',
     services: [
       'Resistance knob not engaging',
       'Flywheel noise or wobble',
@@ -119,7 +119,7 @@ export const appliances = [
     name: 'Rowing Machine',
     title: 'Rowing Machine Repair',
     description: 'Rowing machine repair and maintenance services',
-    image: '/photos/scenes/scene-10.webp',
+    image: '/equipment/concept2/rowing-machine.webp',
     services: [
       'Chain or strap replacement',
       'Resistance mechanism failure',
@@ -147,7 +147,7 @@ export const appliances = [
     name: 'Stair Machine',
     title: 'Stair Machine Repair',
     description: 'Stair climber and stepper repair services',
-    image: '/photos/scenes/scene-13.webp',
+    image: '/equipment/stairmaster/stair-machine.webp',
     services: [
       'Step chain problems',
       'Motor and drive issues',
@@ -176,7 +176,7 @@ export const appliances = [
     name: 'Weight Machine',
     title: 'Weight Machine Repair',
     description: 'Weight machine and home gym repair services',
-    image: '/photos/scenes/scene-15.webp',
+    image: '/equipment/body-solid/weight-machine.webp',
     services: [
       'Cable replacement and adjustment',
       'Pulley system repair',

@@ -6,6 +6,7 @@ import Reviews from '@/components/Reviews';
 import SEOContent from '@/components/SEOContent';
 import { brands } from '@/lib/data/brands';
 import { appliances } from '@/lib/data/appliances';
+import { getEquipmentImage } from '@/lib/data/equipmentImages';
 import { generatePageMetadata } from '@/lib/seo/metadata';
 import { generateLocalBusinessSchema, generateServiceSchema, generateBreadcrumbSchema } from '@/lib/seo/schema';
 
@@ -69,7 +70,7 @@ export default async function BrandApplianceRepairPage({ params }: PageProps) {
         appliance={appliance.name}
         brand={brand.name}
         brandLogo={brand.logo}
-        applianceImage={appliance.image}
+        applianceImage={getEquipmentImage(cleanBrandSlug, cleanApplianceSlug)?.src || appliance.image}
       />
 
       {/* Why Choose Us Section */}

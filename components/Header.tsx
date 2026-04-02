@@ -53,15 +53,17 @@ export default function Header() {
         <div className="flex justify-between items-center">
           {/* Logo */}
           <Link href="/" className="flex items-center -my-2">
-            <Image
-              src="/logo.png"
-              alt="H-Prime Gym Equipment Repair Services"
-              width={344}
-              height={121}
-              className="h-14 md:h-20 w-auto"
-              priority
-              quality={95}
-            />
+            <div className="py-1">
+              <Image
+                src="/logo.png"
+                alt="H-Prime Gym Equipment Repair Services"
+                width={344}
+                height={121}
+                className="h-10 md:h-14 w-auto"
+                priority
+                quality={95}
+              />
+            </div>
           </Link>
 
           {/* Navigation - Desktop */}

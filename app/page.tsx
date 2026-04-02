@@ -98,21 +98,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Certifications */}
-      <section className="py-12 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6">
-              Factory-Trained Gym Equipment Professionals
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Our technicians are factory-trained on all major gym equipment brands including
-              Life Fitness, Precor, NordicTrack, Peloton, Matrix, Cybex, and more.
-            </p>
-          </div>
-        </div>
-      </section>
-
       {/* SEO Content Section */}
       <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">

@@ -14,7 +14,7 @@ interface HeroProps {
 }
 
 export default function Hero({ title, subtitle = 'Same-day service, certified technicians', brand, brandLogo, applianceImage }: HeroProps) {
-  const backgroundImage = applianceImage || "/hero-desktop.png";
+  const backgroundImage = applianceImage || "/equipment/life-fitness/treadmill.webp";
 
   return (
     <section className="relative h-[calc(100vh-5rem)] md:h-auto md:py-20 overflow-hidden" style={{ backgroundColor: '#1B2A4A' }}>
