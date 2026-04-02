@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Hero from '@/components/Hero';
 import Reviews from '@/components/Reviews';
 import SEOContent from '@/components/SEOContent';
+import { CheckCircle, MapPin, Wrench, Zap } from 'lucide-react';
 import { cities, getCitiesByCounty } from '@/lib/data/cities';
 import { brands } from '@/lib/data/brands';
 import { appliances } from '@/lib/data/appliances';
@@ -127,32 +128,40 @@ export default async function CityBrandApplianceRepairPage({ params }: PageProps
             Why Choose Us for {brand.name} {appliance.name} Repair in {city.name}?
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
-            <div className="text-center">
-              <div className="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">🔧</span>
+            <div className="bg-white p-6 rounded-lg shadow-md text-center">
+              <div className="flex justify-center mb-4">
+                <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ backgroundColor: '#FFF8E0' }}>
+                  <Wrench className="w-10 h-10" style={{ color: '#1B2A4A' }} />
+                </div>
               </div>
-              <h3 className="font-semibold text-lg mb-2">{brand.name} Specialists</h3>
+              <h3 className="text-xl font-bold mb-3 text-gray-900">{brand.name} Specialists</h3>
               <p className="text-gray-600">Factory-trained on {brand.name} {appliance.name.toLowerCase()} models</p>
             </div>
-            <div className="text-center">
-              <div className="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">📍</span>
+            <div className="bg-white p-6 rounded-lg shadow-md text-center">
+              <div className="flex justify-center mb-4">
+                <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ backgroundColor: '#FFF8E0' }}>
+                  <MapPin className="w-10 h-10" style={{ color: '#1B2A4A' }} />
+                </div>
               </div>
-              <h3 className="font-semibold text-lg mb-2">Local to {city.name}</h3>
+              <h3 className="text-xl font-bold mb-3 text-gray-900">Local to {city.name}</h3>
               <p className="text-gray-600">Fast response times in your area</p>
             </div>
-            <div className="text-center">
-              <div className="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">✓</span>
+            <div className="bg-white p-6 rounded-lg shadow-md text-center">
+              <div className="flex justify-center mb-4">
+                <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ backgroundColor: '#FFF8E0' }}>
+                  <CheckCircle className="w-10 h-10" style={{ color: '#1B2A4A' }} />
+                </div>
               </div>
-              <h3 className="font-semibold text-lg mb-2">Genuine {brand.name} Parts</h3>
+              <h3 className="text-xl font-bold mb-3 text-gray-900">Genuine {brand.name} Parts</h3>
               <p className="text-gray-600">Only authentic replacement parts</p>
             </div>
-            <div className="text-center">
-              <div className="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">⚡</span>
+            <div className="bg-white p-6 rounded-lg shadow-md text-center">
+              <div className="flex justify-center mb-4">
+                <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ backgroundColor: '#FFF8E0' }}>
+                  <Zap className="w-10 h-10" style={{ color: '#1B2A4A' }} />
+                </div>
               </div>
-              <h3 className="font-semibold text-lg mb-2">Same-Day Service</h3>
+              <h3 className="text-xl font-bold mb-3 text-gray-900">Same-Day Service</h3>
               <p className="text-gray-600">Available for {city.name} residents</p>
             </div>
           </div>
