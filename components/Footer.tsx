@@ -34,7 +34,7 @@ export default function Footer() {
             </p>
             <p className="text-sm mt-4">Certified Technicians</p>
             <p className="text-sm">Factory Trained</p>
-            <p className="text-sm">$69 Diagnostic Fee (credited toward repair)</p>
+            <p className="text-sm">$75 Diagnostic Fee (credited toward repair)</p>
             <p className="text-sm mt-2">Mon-Fri: 8AM-6PM</p>
             <p className="text-sm">Sat: 10AM-4PM</p>
           </div>

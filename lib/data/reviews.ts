@@ -12,7 +12,7 @@ export interface Review {
 export const reviews: Review[] = [
   {
     author: 'Michelle K.',
-    text: 'Our NordicTrack treadmill started making a grinding noise and the belt was slipping. Called H-Prime and they sent someone out same day. The technician diagnosed the motor bearing issue, replaced it on the spot, and had us running again in under 2 hours. The $69 diagnostic fee was credited toward the repair!',
+    text: 'Our NordicTrack treadmill started making a grinding noise and the belt was slipping. Called H-Prime and they sent someone out same day. The technician diagnosed the motor bearing issue, replaced it on the spot, and had us running again in under 2 hours. The $75 diagnostic fee was credited toward the repair!',
     rating: 5,
     date: '2 weeks ago'
   },
