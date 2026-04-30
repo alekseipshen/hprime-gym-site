@@ -2,17 +2,29 @@ import { NextRequest, NextResponse } from 'next/server';
 
 interface LeadData {
   name: string;
+  firstName?: string;
+  lastName?: string;
   phone: string;
   email: string;
-  message?: string;
-  recaptchaToken: string;
+  street?: string;
+  apartment?: string;
+  city?: string;
+  zipCode?: string;
+  equipment?: string;
+  attribution?: Record<string, string>;
+  submission_page?: string;
 }
+
+const escapeHtml = (s: string): string =>
+  String(s ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 
 export async function POST(request: NextRequest) {
   try {
     const data: LeadData = await request.json();
 
-    // Validate required fields
     if (!data.name || !data.phone || !data.email) {
       return NextResponse.json(
         { error: 'Missing required fields' },
@@ -20,57 +32,123 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    let recaptchaScore = 1.0; // Default score when reCAPTCHA is disabled
+    const botToken = process.env.TELEGRAM_BOT_TOKEN;
+    const chatId = process.env.TELEGRAM_CHAT_ID;
 
-    // Verify reCAPTCHA token only if configured and token is not 'bypass'
-    const recaptchaSecret = process.env.RECAPTCHA_SECRET_KEY;
-    if (recaptchaSecret && data.recaptchaToken && data.recaptchaToken !== 'bypass') {
-      try {
-        const recaptchaResponse = await fetch(
-          `https://www.google.com/recaptcha/api/siteverify?secret=${recaptchaSecret}&response=${data.recaptchaToken}`,
-          { method: 'POST' }
-        );
-
-        const recaptchaData = await recaptchaResponse.json();
-
-        // Check reCAPTCHA score (minimum 0.3)
-        if (!recaptchaData.success || recaptchaData.score < 0.3) {
-          console.log('Low reCAPTCHA score:', recaptchaData.score);
-          // Save as potential bot, but don't send to Google Ads
-          return NextResponse.json(
-            { error: 'Failed verification' },
-            { status: 400 }
-          );
-        }
-
-        recaptchaScore = recaptchaData.score;
-      } catch (error) {
-        console.log('reCAPTCHA verification failed, proceeding without it');
-      }
+    if (!botToken || !chatId) {
+      console.error('[TELEGRAM] Missing TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID env vars');
+      return NextResponse.json(
+        { error: 'Server configuration error' },
+        { status: 500 }
+      );
     }
 
-    // Prepare lead data for n8n webhook
-    const leadPayload = {
-      name: data.name,
-      phone: data.phone,
-      email: data.email,
-      message: data.message || '',
-      source: 'website',
-      timestamp: new Date().toISOString(),
-      recaptchaScore: recaptchaScore,
-      url: request.headers.get('referer') || 'unknown',
-    };
+    const sourceUrl = request.headers.get('referer') || 'unknown';
+    const timestamp = new Date().toLocaleString('en-US', {
+      timeZone: 'America/Denver',
+      dateStyle: 'short',
+      timeStyle: 'short',
+    });
 
-    // Send to n8n webhook for processing
-    const webhookUrl = process.env.N8N_WEBHOOK_URL;
-    if (webhookUrl) {
-      await fetch(webhookUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(leadPayload),
-      });
+    const phoneDigits = data.phone.replace(/\D/g, '');
+    const phoneFormatted =
+      phoneDigits.length === 10
+        ? `(${phoneDigits.slice(0, 3)}) ${phoneDigits.slice(3, 6)}-${phoneDigits.slice(6)}`
+        : data.phone;
+
+    const addressParts: string[] = [];
+    if (data.street) addressParts.push(data.street);
+    if (data.apartment) addressParts.push(data.apartment);
+    if (data.city) {
+      addressParts.push(`${data.city}, CO ${data.zipCode || ''}`.trim());
+    }
+    const addressLine = addressParts.join(', ');
+
+    const lines: string[] = [
+      '🔔 <b>New Gym Equipment Repair Lead</b>',
+      '',
+      `👤 <b>Name:</b> ${escapeHtml(data.name)}`,
+      `📞 <b>Phone:</b> <a href="tel:+1${phoneDigits}">${escapeHtml(phoneFormatted)}</a>`,
+      `📧 <b>Email:</b> ${escapeHtml(data.email)}`,
+    ];
+    if (addressLine) {
+      lines.push(`📍 <b>Address:</b> ${escapeHtml(addressLine)}`);
+    }
+    if (data.equipment) {
+      lines.push(`🔧 <b>Equipment:</b> ${escapeHtml(data.equipment)}`);
+    }
+
+    const attribution = data.attribution || {};
+    const utmSource = attribution.utm_source || '';
+    const utmMedium = attribution.utm_medium || '';
+    const utmCampaign = attribution.utm_campaign || '';
+    const utmContent = attribution.utm_content || '';
+    const utmTerm = attribution.utm_term || '';
+    const gclid = attribution.gclid || '';
+    const gbraid = attribution.gbraid || '';
+    const wbraid = attribution.wbraid || '';
+    const fbclid = attribution.fbclid || '';
+    const msclkid = attribution.msclkid || '';
+    const landingPage = attribution.landing_page || '';
+    const landingReferrer = attribution.landing_referrer || '';
+
+    const hasAttribution =
+      utmSource || utmMedium || utmCampaign || utmContent || utmTerm ||
+      gclid || gbraid || wbraid || fbclid || msclkid;
+
+    lines.push('');
+    lines.push('━━━━━━━━━━━━━━━━━');
+    lines.push('📊 <b>Attribution</b>');
+
+    if (hasAttribution) {
+      const trafficLabel = utmSource
+        ? `${utmSource}${utmMedium ? ' / ' + utmMedium : ''}`
+        : gclid
+          ? 'google ads (gclid)'
+          : fbclid
+            ? 'facebook (fbclid)'
+            : msclkid
+              ? 'microsoft ads (msclkid)'
+              : 'paid (untagged)';
+      lines.push(`📣 <b>Source:</b> ${escapeHtml(trafficLabel)}`);
+      if (utmCampaign) lines.push(`🎯 <b>Campaign:</b> ${escapeHtml(utmCampaign)}`);
+      if (utmContent) lines.push(`🧩 <b>Content:</b> ${escapeHtml(utmContent)}`);
+      if (utmTerm) lines.push(`🔑 <b>Term:</b> ${escapeHtml(utmTerm)}`);
+      if (gclid) lines.push(`🆔 <b>gclid:</b> <code>${escapeHtml(gclid)}</code>`);
+      if (gbraid) lines.push(`🆔 <b>gbraid:</b> <code>${escapeHtml(gbraid)}</code>`);
+      if (wbraid) lines.push(`🆔 <b>wbraid:</b> <code>${escapeHtml(wbraid)}</code>`);
+      if (fbclid) lines.push(`🆔 <b>fbclid:</b> <code>${escapeHtml(fbclid)}</code>`);
+      if (msclkid) lines.push(`🆔 <b>msclkid:</b> <code>${escapeHtml(msclkid)}</code>`);
+    } else {
+      lines.push(`📣 <b>Source:</b> direct / organic`);
+    }
+    if (landingPage) lines.push(`🛬 <b>Landing:</b> ${escapeHtml(landingPage)}`);
+    if (landingReferrer) lines.push(`↩️ <b>Referrer:</b> ${escapeHtml(landingReferrer)}`);
+
+    lines.push('');
+    lines.push(`🌐 <b>Submitted from:</b> ${escapeHtml(data.submission_page || sourceUrl)}`);
+    lines.push(`🕐 <b>Time:</b> ${escapeHtml(timestamp)} (Denver)`);
+
+    const text = lines.join('\n');
+
+    const tgRes = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text,
+        parse_mode: 'HTML',
+        disable_web_page_preview: true,
+      }),
+    });
+
+    if (!tgRes.ok) {
+      const body = await tgRes.text();
+      console.error('[TELEGRAM] sendMessage failed:', tgRes.status, body);
+      return NextResponse.json(
+        { error: 'Notification failed' },
+        { status: 500 }
+      );
     }
 
     return NextResponse.json({
@@ -85,7 +163,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-
-
-
-

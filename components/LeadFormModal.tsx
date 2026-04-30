@@ -1,9 +1,7 @@
 'use client';
 
 import { X } from 'lucide-react';
-
-const WORKIZ_BOOKING_URL =
-  'https://online-booking.workiz.com/?ac=83c5b14b03e62f92f919b8b4eeb24b5d79e56eebb87e6461f45b9b3a4f852d4e&ad_group=Gym%20Equipment%20Repair';
+import LeadForm from './LeadForm';
 
 interface LeadFormModalProps {
   isOpen: boolean;
@@ -16,7 +14,6 @@ export default function LeadFormModal({ isOpen, onClose }: LeadFormModalProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
       <div className="relative w-full max-w-2xl max-h-[90vh] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden">
-        {/* Header */}
         <div className="shrink-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between z-10">
           <h2 className="text-xl font-bold text-gray-900">
             Book Gym Equipment Repair Service
@@ -30,15 +27,8 @@ export default function LeadFormModal({ isOpen, onClose }: LeadFormModalProps) {
           </button>
         </div>
 
-        {/* Workiz Booking iframe */}
-        <div className="flex-1 min-h-0 overflow-y-auto">
-          <iframe
-            src={WORKIZ_BOOKING_URL}
-            width="100%"
-            height="700"
-            style={{ border: 'none', minHeight: '700px' }}
-            title="Book H-Prime Gym Equipment Repair Service"
-          />
+        <div className="flex-1 min-h-0 overflow-y-auto p-6">
+          <LeadForm variant="modal" onSuccess={onClose} />
         </div>
       </div>
     </div>

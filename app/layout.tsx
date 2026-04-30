@@ -8,6 +8,7 @@ import { ModalProvider } from '@/contexts/ModalContext';
 import LeadFormModalWrapper from '@/components/LeadFormModalWrapper';
 import StickyMobileBar from '@/components/StickyMobileBar';
 import PromoPopup from '@/components/PromoPopup';
+import UTMTracker from '@/components/UTMTracker';
 import { generateOrganizationSchema, generateWebSiteSchema } from '@/lib/seo/schema';
 
 const inter = Inter({
@@ -82,6 +83,7 @@ export default function RootLayout({
             style={{ display: 'none', visibility: 'hidden' }}
           />
         </noscript>
+        <UTMTracker />
         <ModalProvider>
           <Header />
           <main>{children}</main>
