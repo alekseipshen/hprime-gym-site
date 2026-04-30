@@ -11,6 +11,8 @@ interface LeadData {
   city?: string;
   zipCode?: string;
   equipment?: string;
+  preferredDate?: string;
+  preferredTimeSlot?: string;
   attribution?: Record<string, string>;
   submission_page?: string;
 }
@@ -76,6 +78,25 @@ export async function POST(request: NextRequest) {
     }
     if (data.equipment) {
       lines.push(`🔧 <b>Equipment:</b> ${escapeHtml(data.equipment)}`);
+    }
+
+    if (data.preferredDate || data.preferredTimeSlot) {
+      let when = '';
+      if (data.preferredDate) {
+        const d = new Date(data.preferredDate + 'T00:00:00');
+        when = isNaN(d.getTime())
+          ? data.preferredDate
+          : d.toLocaleDateString('en-US', {
+              weekday: 'short',
+              month: 'short',
+              day: 'numeric',
+              year: 'numeric',
+            });
+      }
+      if (data.preferredTimeSlot) {
+        when = when ? `${when} · ${data.preferredTimeSlot}` : data.preferredTimeSlot;
+      }
+      lines.push(`📅 <b>Preferred:</b> ${escapeHtml(when)}`);
     }
 
     const attribution = data.attribution || {};

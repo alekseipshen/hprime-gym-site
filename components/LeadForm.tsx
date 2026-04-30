@@ -15,14 +15,24 @@ const formSchema = z.object({
     .min(10, 'Please enter a valid phone number')
     .refine((val) => val.replace(/\D/g, '').length === 10, 'Please enter a complete 10-digit phone number'),
   email: z.string().email('Please enter a valid email'),
+  message: z.string().min(5, 'Please describe the issue (minimum 5 characters)'),
   street: z.string().min(3, 'Street address is required'),
   apartment: z.string().optional(),
   city: z.string().min(2, 'City is required'),
   zipCode: z.string().min(5, 'Please enter a valid 5-digit ZIP code'),
-  message: z.string().min(5, 'Please describe the issue (minimum 5 characters)'),
+  preferredDate: z.string().min(1, 'Please select a preferred date'),
+  preferredTimeSlot: z.string().min(1, 'Please select a time slot'),
 });
 
 type FormData = z.infer<typeof formSchema>;
+
+const STEP_1_FIELDS: Array<keyof FormData> = ['firstName', 'lastName', 'phone', 'email', 'message'];
+
+const todayLocalISO = (): string => {
+  const now = new Date();
+  const offsetMs = now.getTimezoneOffset() * 60_000;
+  return new Date(now.getTime() - offsetMs).toISOString().slice(0, 10);
+};
 
 interface LeadFormProps {
   variant?: 'section' | 'modal';
@@ -31,6 +41,7 @@ interface LeadFormProps {
 
 export default function LeadForm({ variant = 'section', onSuccess }: LeadFormProps) {
   const router = useRouter();
+  const [step, setStep] = useState<1 | 2>(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
@@ -40,9 +51,18 @@ export default function LeadForm({ variant = 'section', onSuccess }: LeadFormPro
     formState: { errors },
     reset,
     control,
+    trigger,
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
+    mode: 'onTouched',
   });
+
+  const goToStep2 = async () => {
+    const valid = await trigger(STEP_1_FIELDS);
+    if (valid) setStep(2);
+  };
+
+  const goToStep1 = () => setStep(1);
 
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
@@ -75,6 +95,8 @@ export default function LeadForm({ variant = 'section', onSuccess }: LeadFormPro
           city: cleanText(data.city),
           zipCode: data.zipCode,
           equipment: cleanText(data.message),
+          preferredDate: data.preferredDate,
+          preferredTimeSlot: data.preferredTimeSlot,
           attribution,
           submission_page: typeof window !== 'undefined' ? window.location.pathname + window.location.search : '',
         }),
@@ -112,130 +134,111 @@ export default function LeadForm({ variant = 'section', onSuccess }: LeadFormPro
     }
   };
 
-  const formContent = (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label htmlFor="firstName" className="block text-sm font-semibold text-gray-700 mb-2">
-            First name *
-          </label>
-          <input
-            {...register('firstName')}
-            type="text"
-            id="firstName"
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="John"
-          />
-          {errors.firstName && (
-            <p className="text-red-600 text-sm mt-1">{errors.firstName.message}</p>
-          )}
-        </div>
-        <div>
-          <label htmlFor="lastName" className="block text-sm font-semibold text-gray-700 mb-2">
-            Last name *
-          </label>
-          <input
-            {...register('lastName')}
-            type="text"
-            id="lastName"
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="Smith"
-          />
-          {errors.lastName && (
-            <p className="text-red-600 text-sm mt-1">{errors.lastName.message}</p>
-          )}
-        </div>
-      </div>
+  const inputCls =
+    'w-full px-3 py-2.5 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent';
+  const labelCls = 'block text-sm font-semibold text-gray-700 mb-1';
+  const errorCls = 'text-red-600 text-xs mt-0.5';
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+  const stepIndicator = (
+    <div className="flex items-center justify-center gap-2 mb-4" aria-label={`Step ${step} of 2`}>
+      <div
+        className={`h-2 w-12 rounded-full transition-colors ${step === 1 ? 'bg-[#1B2A4A]' : 'bg-gray-300'}`}
+        aria-hidden="true"
+      />
+      <div
+        className={`h-2 w-12 rounded-full transition-colors ${step === 2 ? 'bg-[#1B2A4A]' : 'bg-gray-300'}`}
+        aria-hidden="true"
+      />
+      <span className="ml-2 text-xs text-gray-500">{step}/2</span>
+    </div>
+  );
+
+  const step1 = (
+    <div className="space-y-3">
+      <div className="grid grid-cols-2 gap-3">
         <div>
-          <label htmlFor="phone" className="block text-sm font-semibold text-gray-700 mb-2">
-            Phone *
-          </label>
-          <Controller
-            name="phone"
-            control={control}
-            render={({ field }) => (
-              <PatternFormat
-                {...field}
-                format="(###) ###-####"
-                mask="_"
-                placeholder="(720) 555-0123"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            )}
-          />
-          {errors.phone && (
-            <p className="text-red-600 text-sm mt-1">{errors.phone.message}</p>
-          )}
+          <label htmlFor="firstName" className={labelCls}>First name *</label>
+          <input {...register('firstName')} type="text" id="firstName" className={inputCls} placeholder="John" autoComplete="given-name" />
+          {errors.firstName && <p className={errorCls}>{errors.firstName.message}</p>}
         </div>
         <div>
-          <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
-            E-mail address *
-          </label>
-          <input
-            {...register('email')}
-            type="email"
-            id="email"
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="john@example.com"
-          />
-          {errors.email && (
-            <p className="text-red-600 text-sm mt-1">{errors.email.message}</p>
-          )}
+          <label htmlFor="lastName" className={labelCls}>Last name *</label>
+          <input {...register('lastName')} type="text" id="lastName" className={inputCls} placeholder="Smith" autoComplete="family-name" />
+          {errors.lastName && <p className={errorCls}>{errors.lastName.message}</p>}
         </div>
       </div>
 
       <div>
-        <label htmlFor="street" className="block text-sm font-semibold text-gray-700 mb-2">
-          Street address *
-        </label>
-        <input
-          {...register('street')}
-          type="text"
-          id="street"
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          placeholder="123 Main Street"
+        <label htmlFor="phone" className={labelCls}>Phone *</label>
+        <Controller
+          name="phone"
+          control={control}
+          render={({ field }) => (
+            <PatternFormat
+              {...field}
+              format="(###) ###-####"
+              mask="_"
+              placeholder="(720) 555-0123"
+              className={inputCls}
+              type="tel"
+              autoComplete="tel"
+            />
+          )}
         />
-        {errors.street && (
-          <p className="text-red-600 text-sm mt-1">{errors.street.message}</p>
-        )}
+        {errors.phone && <p className={errorCls}>{errors.phone.message}</p>}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label htmlFor="email" className={labelCls}>E-mail *</label>
+        <input {...register('email')} type="email" id="email" className={inputCls} placeholder="john@example.com" autoComplete="email" inputMode="email" />
+        {errors.email && <p className={errorCls}>{errors.email.message}</p>}
+      </div>
+
+      <div>
+        <label htmlFor="message" className={labelCls}>What gym equipment needs repair? *</label>
+        <textarea
+          {...register('message')}
+          id="message"
+          rows={3}
+          className={inputCls}
+          placeholder="My Peloton treadmill won't turn on, error E01"
+        />
+        {errors.message && <p className={errorCls}>{errors.message.message}</p>}
+      </div>
+
+      <button
+        type="button"
+        onClick={goToStep2}
+        className="w-full text-white py-3 rounded-lg transition font-semibold text-base shadow-lg hover:shadow-xl"
+        style={{ backgroundColor: '#1B2A4A' }}
+      >
+        Continue →
+      </button>
+    </div>
+  );
+
+  const step2 = (
+    <div className="space-y-3">
+      <div>
+        <label htmlFor="street" className={labelCls}>Street address *</label>
+        <input {...register('street')} type="text" id="street" className={inputCls} placeholder="123 Main Street" autoComplete="address-line1" />
+        {errors.street && <p className={errorCls}>{errors.street.message}</p>}
+      </div>
+
+      <div className="grid grid-cols-2 gap-3">
         <div>
-          <label htmlFor="apartment" className="block text-sm font-semibold text-gray-700 mb-2">
-            Unit / apartment / suite
-          </label>
-          <input
-            {...register('apartment')}
-            type="text"
-            id="apartment"
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="Apt 4B"
-          />
+          <label htmlFor="apartment" className={labelCls}>Unit / Apt</label>
+          <input {...register('apartment')} type="text" id="apartment" className={inputCls} placeholder="Apt 4B" autoComplete="address-line2" />
         </div>
         <div>
-          <label htmlFor="city" className="block text-sm font-semibold text-gray-700 mb-2">
-            City *
-          </label>
-          <input
-            {...register('city')}
-            type="text"
-            id="city"
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="Denver"
-          />
-          {errors.city && (
-            <p className="text-red-600 text-sm mt-1">{errors.city.message}</p>
-          )}
+          <label htmlFor="city" className={labelCls}>City *</label>
+          <input {...register('city')} type="text" id="city" className={inputCls} placeholder="Denver" autoComplete="address-level2" />
+          {errors.city && <p className={errorCls}>{errors.city.message}</p>}
         </div>
       </div>
 
       <div>
-        <label htmlFor="zipCode" className="block text-sm font-semibold text-gray-700 mb-2">
-          Zip code *
-        </label>
+        <label htmlFor="zipCode" className={labelCls}>ZIP code *</label>
         <Controller
           name="zipCode"
           control={control}
@@ -245,45 +248,76 @@ export default function LeadForm({ variant = 'section', onSuccess }: LeadFormPro
               format="#####"
               mask="_"
               placeholder="80202"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className={inputCls}
+              type="text"
+              inputMode="numeric"
+              autoComplete="postal-code"
             />
           )}
         />
-        {errors.zipCode && (
-          <p className="text-red-600 text-sm mt-1">{errors.zipCode.message}</p>
-        )}
+        {errors.zipCode && <p className={errorCls}>{errors.zipCode.message}</p>}
       </div>
 
-      <div>
-        <label htmlFor="message" className="block text-sm font-semibold text-gray-700 mb-2">
-          What gym equipment needs repair? *
-        </label>
-        <textarea
-          {...register('message')}
-          id="message"
-          rows={4}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          placeholder="My Peloton treadmill won't turn on, error code E01"
-        />
-        {errors.message && (
-          <p className="text-red-600 text-sm mt-1">{errors.message.message}</p>
-        )}
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label htmlFor="preferredDate" className={labelCls}>Preferred date *</label>
+          <input
+            {...register('preferredDate')}
+            type="date"
+            id="preferredDate"
+            min={todayLocalISO()}
+            className={inputCls}
+          />
+          {errors.preferredDate && <p className={errorCls}>{errors.preferredDate.message}</p>}
+        </div>
+        <div>
+          <label htmlFor="preferredTimeSlot" className={labelCls}>Time slot *</label>
+          <select
+            {...register('preferredTimeSlot')}
+            id="preferredTimeSlot"
+            className={inputCls}
+            defaultValue=""
+          >
+            <option value="" disabled>Select…</option>
+            <option value="Morning (8 AM – 12 PM)">Morning (8 AM – 12 PM)</option>
+            <option value="Afternoon (12 PM – 5 PM)">Afternoon (12 PM – 5 PM)</option>
+            <option value="Evening (5 PM – 8 PM)">Evening (5 PM – 8 PM)</option>
+            <option value="Anytime">Anytime</option>
+          </select>
+          {errors.preferredTimeSlot && <p className={errorCls}>{errors.preferredTimeSlot.message}</p>}
+        </div>
       </div>
 
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className="w-full text-white py-4 rounded-lg transition font-semibold text-lg shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
-        style={{ backgroundColor: '#1B2A4A' }}
-      >
-        {isSubmitting ? 'Submitting...' : 'Request Service Call'}
-      </button>
+      <div className="grid grid-cols-3 gap-3 pt-1">
+        <button
+          type="button"
+          onClick={goToStep1}
+          className="col-span-1 py-3 rounded-lg font-semibold text-sm border border-gray-300 text-gray-700 hover:bg-gray-50 transition"
+        >
+          ← Back
+        </button>
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="col-span-2 text-white py-3 rounded-lg transition font-semibold text-base shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+          style={{ backgroundColor: '#1B2A4A' }}
+        >
+          {isSubmitting ? 'Submitting…' : 'Request Service'}
+        </button>
+      </div>
 
       {submitStatus === 'error' && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+        <div className="bg-red-100 border border-red-400 text-red-700 px-3 py-2 rounded text-sm">
           Something went wrong. Please try again or call us directly.
         </div>
       )}
+    </div>
+  );
+
+  const formContent = (
+    <form onSubmit={handleSubmit(onSubmit)} noValidate>
+      {stepIndicator}
+      {step === 1 ? step1 : step2}
     </form>
   );
 
@@ -292,15 +326,17 @@ export default function LeadForm({ variant = 'section', onSuccess }: LeadFormPro
   }
 
   return (
-    <section id="lead-form" className="py-16 bg-gradient-to-br from-blue-50 to-orange-50">
+    <section id="lead-form" className="py-12 bg-gradient-to-br from-blue-50 to-orange-50">
       <div className="container mx-auto px-4">
-        <div className="max-w-2xl mx-auto bg-white rounded-2xl shadow-xl p-8">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Request Service Today
+        <div className="max-w-2xl mx-auto bg-white rounded-2xl shadow-xl p-6 md:p-8">
+          <div className="text-center mb-4">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-1">
+              {step === 1 ? 'Request Service Today' : 'When should we come?'}
             </h2>
-            <p className="text-lg text-gray-600">
-              Fill out the form and we&apos;ll call you back within 15 minutes
+            <p className="text-sm md:text-base text-gray-600">
+              {step === 1
+                ? "We'll call you back within 15 minutes"
+                : 'Choose your address & preferred time'}
             </p>
           </div>
           {formContent}
