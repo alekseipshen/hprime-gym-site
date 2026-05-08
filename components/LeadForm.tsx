@@ -122,7 +122,11 @@ export default function LeadForm({ variant = 'section', onSuccess }: LeadFormPro
         setSubmitStatus('success');
         reset();
         if (onSuccess) onSuccess();
-        router.push('/thank-you-page');
+        const tyParams = new URLSearchParams({
+          date: data.preferredDate,
+          time: data.preferredTimeSlot,
+        });
+        router.push(`/thank-you-page?${tyParams.toString()}`);
       } else {
         setSubmitStatus('error');
       }
@@ -279,10 +283,10 @@ export default function LeadForm({ variant = 'section', onSuccess }: LeadFormPro
             defaultValue=""
           >
             <option value="" disabled>Select…</option>
-            <option value="Morning (8 AM – 12 PM)">Morning (8 AM – 12 PM)</option>
-            <option value="Afternoon (12 PM – 5 PM)">Afternoon (12 PM – 5 PM)</option>
-            <option value="Evening (5 PM – 8 PM)">Evening (5 PM – 8 PM)</option>
-            <option value="Anytime">Anytime</option>
+            <option value="7 AM – 10 AM">7 AM – 10 AM</option>
+            <option value="10 AM – 1 PM">10 AM – 1 PM</option>
+            <option value="1 PM – 4 PM">1 PM – 4 PM</option>
+            <option value="4 PM – 7 PM">4 PM – 7 PM</option>
           </select>
           {errors.preferredTimeSlot && <p className={errorCls}>{errors.preferredTimeSlot.message}</p>}
         </div>
