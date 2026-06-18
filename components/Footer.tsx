@@ -101,6 +101,11 @@ export default function Footer() {
             <h4 className="text-white font-semibold mb-3 mt-6">Legal</h4>
             <ul className="space-y-2 text-xs">
               <li>
+                <Link href="/parts" className="hover:text-white transition">
+                  Replacement Parts
+                </Link>
+              </li>
+              <li>
                 <Link href="/privacy-policy" className="hover:text-white transition">
                   Privacy Policy
                 </Link>
