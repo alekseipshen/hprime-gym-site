@@ -7,6 +7,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { PatternFormat } from 'react-number-format';
 
+// Temporary holiday closure — Independence Day weekend 2026 (Fri Jul 3 – Sun Jul 5).
+// Self-expiring: once these dates are in the past, `min={today}` on the date input already
+// prevents selecting them, so the refine below becomes a no-op. Safe to leave; remove anytime.
+const BLOCKED_DATES = ['2026-07-03', '2026-07-04', '2026-07-05'];
+
 const formSchema = z.object({
   firstName: z.string().min(2, 'First name must be at least 2 characters'),
   lastName: z.string().min(2, 'Last name must be at least 2 characters'),
@@ -20,7 +25,12 @@ const formSchema = z.object({
   apartment: z.string().optional(),
   city: z.string().min(2, 'City is required'),
   zipCode: z.string().min(5, 'Please enter a valid 5-digit ZIP code'),
-  preferredDate: z.string().min(1, 'Please select a preferred date'),
+  preferredDate: z
+    .string()
+    .min(1, 'Please select a preferred date')
+    .refine((val) => !BLOCKED_DATES.includes(val), {
+      message: 'We are closed Jul 3–5 for the holiday. Please choose another date.',
+    }),
   preferredTimeSlot: z.string().min(1, 'Please select a time slot'),
 });
 
@@ -272,6 +282,9 @@ export default function LeadForm({ variant = 'section', onSuccess }: LeadFormPro
             min={todayLocalISO()}
             className={inputCls}
           />
+          {BLOCKED_DATES.some((d) => d >= todayLocalISO()) && (
+            <p className="text-amber-600 text-xs mt-0.5">Closed Jul 3–5 for the holiday — please pick another date.</p>
+          )}
           {errors.preferredDate && <p className={errorCls}>{errors.preferredDate.message}</p>}
         </div>
         <div>
