@@ -9,8 +9,9 @@ const SITE_URL = 'https://www.hprime-gym.com';
 const BUSINESS_NAME = 'H-Prime Gym Equipment Repair';
 const PHONE = '+17207066650';
 const PHONE_DISPLAY = '(720) 706-6650';
-const GOOGLE_RATING = 4.9;
-const REVIEW_COUNT = 47;
+// Live GBP values (checked 2026-07-10, place_id ChIJ-9PIIigRJy0Rt-5gcmeOzAo)
+const GOOGLE_RATING = 5.0;
+const REVIEW_COUNT = 9;
 
 export function generateLocalBusinessSchema(params: SchemaParams) {
   const { city, appliance, brand, county } = params;
@@ -24,7 +25,7 @@ export function generateLocalBusinessSchema(params: SchemaParams) {
     url: SITE_URL,
     telephone: PHONE,
     priceRange: '$$',
-    image: `${SITE_URL}/logo-original.jpg`,
+    image: `${SITE_URL}/logo-og.png`,
     aggregateRating: {
       '@type': 'AggregateRating',
       ratingValue: GOOGLE_RATING.toString(),
@@ -43,14 +44,14 @@ export function generateLocalBusinessSchema(params: SchemaParams) {
       {
         '@type': 'OpeningHoursSpecification',
         dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-        opens: '08:00',
-        closes: '18:00',
+        opens: '07:00',
+        closes: '19:00',
       },
       {
         '@type': 'OpeningHoursSpecification',
         dayOfWeek: ['Saturday'],
-        opens: '10:00',
-        closes: '16:00',
+        opens: '09:00',
+        closes: '17:00',
       },
     ],
   };
@@ -157,7 +158,7 @@ export function generateOrganizationSchema() {
     '@id': `${SITE_URL}#organization`,
     name: BUSINESS_NAME,
     url: SITE_URL,
-    logo: `${SITE_URL}/logo-original.jpg`,
+    logo: `${SITE_URL}/logo-og.png`,
     telephone: PHONE,
     contactPoint: {
       '@type': 'ContactPoint',
@@ -172,7 +173,9 @@ export function generateOrganizationSchema() {
       addressRegion: 'CO',
       addressCountry: 'US',
     },
-    sameAs: [],
+    sameAs: [
+      'https://www.google.com/maps/search/?api=1&query=H-Prime%20Fitness%20Equipment%20Repair&query_place_id=ChIJ-9PIIigRJy0Rt-5gcmeOzAo',
+    ],
   };
 }
 

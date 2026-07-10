@@ -4,19 +4,16 @@ import { brands } from '@/lib/data/brands';
 import { cities } from '@/lib/data/cities';
 
 /**
- * PHASE 1 SITEMAP (Month 1-2)
- * ~200 pages: Core pages, top services, top cities, top brands
- * 
- * Strategy: Submit to Google Search Console first
- * Wait for 90%+ indexation before moving to Phase 2
+ * PHASE 1 SITEMAP
+ * Core pages, all 7 services, all 37 cities, top-20 brands (~66 URLs)
  */
 export async function GET() {
   const baseUrl = 'https://www.hprime-gym.com';
   const now = new Date().toISOString();
 
-  // All service area cities
-  const topCities = cities.slice(0, 32);
-  
+  // All service area cities (37)
+  const topCities = cities;
+
   // Top 20 most popular brands
   const topBrands = brands.slice(0, 20);
 
@@ -34,14 +31,7 @@ export async function GET() {
       changeFrequency: 'weekly',
       priority: 0.95,
     },
-    {
-      url: `${baseUrl}/blog`,
-      lastModified: now,
-      changeFrequency: 'daily',
-      priority: 0.9,
-    },
-
-    // All service pages (11 pages) - HIGH PRIORITY
+    // All service pages (7 pages) - HIGH PRIORITY
     ...appliances.map((appliance) => ({
       url: `${baseUrl}/services/${appliance.slug}-repair`,
       lastModified: now,
@@ -49,7 +39,7 @@ export async function GET() {
       priority: 0.9,
     })),
 
-    // Top 50 city pages (major cities)
+    // All 37 city pages
     ...topCities.map((city) => ({
       url: `${baseUrl}/cities/${city.slug}`,
       lastModified: now,
@@ -73,19 +63,7 @@ export async function GET() {
       priority: 0.9,
     },
 
-    // Legal pages (low priority, but included)
-    {
-      url: `${baseUrl}/privacy-policy`,
-      lastModified: '2025-12-01T00:00:00.000Z',
-      changeFrequency: 'yearly',
-      priority: 0.3,
-    },
-    {
-      url: `${baseUrl}/terms-of-use`,
-      lastModified: '2025-12-01T00:00:00.000Z',
-      changeFrequency: 'yearly',
-      priority: 0.3,
-    },
+    // Legal pages are noindex — intentionally excluded from the sitemap
   ];
 
   // Generate XML

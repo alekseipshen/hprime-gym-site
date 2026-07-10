@@ -7,6 +7,12 @@ import { CheckCircle, Clock, Users, Wrench } from 'lucide-react';
 import Link from 'next/link';
 import { generateLocalBusinessSchema, generateFAQSchema } from '@/lib/seo/schema';
 
+export const metadata = {
+  alternates: {
+    canonical: 'https://www.hprime-gym.com',
+  },
+};
+
 const homepageFaqs = [
   { q: 'Why is my treadmill belt slipping?', a: 'Common causes include a worn or loose belt, insufficient lubrication, or a failing drive motor. Regular belt lubrication and tension adjustment can prevent this issue.' },
   { q: 'Why is my elliptical making a grinding noise?', a: 'This is usually caused by worn bearings, a dry or damaged flywheel, or loose hardware. Our technicians can diagnose and replace the affected components quickly.' },

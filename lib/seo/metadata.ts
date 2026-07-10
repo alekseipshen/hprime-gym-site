@@ -58,7 +58,7 @@ export function generatePageMetadata(params: SEOParams): Metadata {
   const fullTitle = title.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`;
 
   const canonicalUrl = buildCanonicalUrl(params);
-  const ogImageUrl = `${SITE_URL}/logo-original.jpg`;
+  const ogImageUrl = `${SITE_URL}/logo-og.png`;
 
   return {
     title: fullTitle,

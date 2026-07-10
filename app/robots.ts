@@ -15,7 +15,6 @@ export default function robots(): MetadataRoute.Robots {
           '/admin/',
           '/test-geo/',
         ],
-        crawlDelay: 1, // 1 second between requests (prevents server overload)
       },
       // Specific rules for major search engines
       {
@@ -27,7 +26,6 @@ export default function robots(): MetadataRoute.Robots {
           '/_next/',
           '/admin/',
         ],
-        crawlDelay: 0.5, // Google can crawl faster
       },
       {
         userAgent: 'Bingbot',
@@ -39,7 +37,6 @@ export default function robots(): MetadataRoute.Robots {
           '/admin/',
           '/test-geo/',
         ],
-        crawlDelay: 1,
       },
     ],
     sitemap: [

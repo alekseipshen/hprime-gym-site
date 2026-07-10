@@ -67,20 +67,18 @@ export function LocalBusinessSchema({ name, city, county, service }: LocalBusine
       {
         '@type': 'OpeningHoursSpecification',
         dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-        opens: '08:00',
-        closes: '18:00',
+        opens: '07:00',
+        closes: '19:00',
       },
       {
         '@type': 'OpeningHoursSpecification',
         dayOfWeek: 'Saturday',
-        opens: '10:00',
-        closes: '16:00',
+        opens: '09:00',
+        closes: '17:00',
       },
     ],
     sameAs: [
-      // Add social media profiles when available
-      // 'https://www.facebook.com/h-prime',
-      // 'https://www.instagram.com/h-prime',
+      'https://www.google.com/maps/search/?api=1&query=H-Prime%20Fitness%20Equipment%20Repair&query_place_id=ChIJ-9PIIigRJy0Rt-5gcmeOzAo',
     ],
     ...(service && {
       hasOfferCatalog: {

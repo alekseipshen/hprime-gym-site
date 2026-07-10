@@ -6,6 +6,9 @@ import Image from 'next/image';
 export const metadata = {
   title: 'Gym Equipment Repair Tips & Blog | H-Prime Gym Equipment Repair Services',
   description: 'Expert tips, guides, and advice for gym equipment repair and maintenance. Learn how to keep your gym equipment running smoothly.',
+  alternates: {
+    canonical: 'https://www.hprime-gym.com/blog',
+  },
 };
 
 // Force dynamic rendering (disable caching)

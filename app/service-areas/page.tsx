@@ -6,6 +6,9 @@ import Link from 'next/link';
 export const metadata = {
   title: 'Service Areas | Gym Equipment Repair in Denver Metro - Denver, Arapahoe, Jefferson, Adams, Douglas, Boulder Counties',
   description: 'H-Prime Gym Equipment Repair covers 30+ cities in Denver Metro area. Same-day gym equipment repair in Denver, Arapahoe, Jefferson, Adams, Douglas, and Boulder counties.',
+  alternates: {
+    canonical: 'https://www.hprime-gym.com/service-areas',
+  },
 };
 
 export default function ServiceAreasPage() {

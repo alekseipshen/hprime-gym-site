@@ -25,9 +25,6 @@ export const metadata: Metadata = {
   title: 'H-Prime Gym Equipment Repair | Denver, CO | Same-Day Service',
   description: 'Professional gym equipment repair in the Denver Metro area. Same-day service, certified technicians. Treadmills, ellipticals, stationary bikes, rowing machines & more. Call (720) 706-6650!',
   keywords: 'gym equipment repair, Denver, Colorado, treadmill repair, elliptical repair, stationary bike repair, rowing machine repair, same-day service, H-Prime',
-  alternates: {
-    canonical: SITE_URL,
-  },
   openGraph: {
     title: 'H-Prime Gym Equipment Repair | Same-Day Service in Denver, CO',
     description: 'Professional gym equipment repair in the Denver Metro area. Same-day service, certified technicians.',
@@ -37,7 +34,7 @@ export const metadata: Metadata = {
     locale: 'en_US',
     images: [
       {
-        url: `${SITE_URL}/logo-original.jpg`,
+        url: `${SITE_URL}/logo-og.png`,
         width: 1200,
         height: 630,
         alt: 'H-Prime Gym Equipment Repair',
@@ -48,7 +45,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'H-Prime Gym Equipment Repair | Same-Day Service in Denver, CO',
     description: 'Professional gym equipment repair in the Denver Metro area. Same-day service, certified technicians.',
-    images: [`${SITE_URL}/logo-original.jpg`],
+    images: [`${SITE_URL}/logo-og.png`],
   },
 };
 
