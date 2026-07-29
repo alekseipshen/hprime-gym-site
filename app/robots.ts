@@ -5,13 +5,15 @@ export default function robots(): MetadataRoute.Robots {
 
   return {
     rules: [
+      // NB: never disallow /_next/. Next/Image serves every optimised image
+      // from /_next/image, so blocking it removes the whole site from Google
+      // Images and strips thumbnails out of the local pack and AI answers.
       {
         userAgent: '*',
         allow: '/',
         disallow: [
           '/api/',
           '/keystatic/',
-          '/_next/',
           '/admin/',
           '/test-geo/',
         ],
@@ -23,7 +25,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: [
           '/api/',
           '/keystatic/',
-          '/_next/',
           '/admin/',
         ],
       },
@@ -33,7 +34,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: [
           '/api/',
           '/keystatic/',
-          '/_next/',
           '/admin/',
           '/test-geo/',
         ],
