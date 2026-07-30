@@ -12,6 +12,15 @@ import { PatternFormat } from 'react-number-format';
 // prevents selecting them, so the refine below becomes a no-op. Safe to leave; remove anytime.
 const BLOCKED_DATES = ['2026-07-03', '2026-07-04', '2026-07-05'];
 
+// Gym is closed on Sundays (open Mon–Sat). A native <input type="date"> can't grey out
+// weekdays, so we reject Sundays in validation and show a hint. Parse the Y-M-D parts and
+// build a LOCAL date so the weekday check is timezone-safe (no UTC off-by-one).
+const isSunday = (val: string): boolean => {
+  const [y, m, d] = val.split('-').map(Number);
+  if (!y || !m || !d) return false;
+  return new Date(y, m - 1, d).getDay() === 0; // 0 = Sunday
+};
+
 const formSchema = z.object({
   firstName: z.string().min(2, 'First name must be at least 2 characters'),
   lastName: z.string().min(2, 'Last name must be at least 2 characters'),
@@ -30,6 +39,9 @@ const formSchema = z.object({
     .min(1, 'Please select a preferred date')
     .refine((val) => !BLOCKED_DATES.includes(val), {
       message: 'We are closed Jul 3–5 for the holiday. Please choose another date.',
+    })
+    .refine((val) => !isSunday(val), {
+      message: "We're closed on Sundays — please choose Monday through Saturday.",
     }),
   preferredTimeSlot: z.string().min(1, 'Please select a time slot'),
 });
@@ -282,6 +294,7 @@ export default function LeadForm({ variant = 'section', onSuccess }: LeadFormPro
             min={todayLocalISO()}
             className={inputCls}
           />
+          <p className="text-gray-500 text-xs mt-0.5">Closed Sundays.</p>
           {BLOCKED_DATES.some((d) => d >= todayLocalISO()) && (
             <p className="text-amber-600 text-xs mt-0.5">Closed Jul 3–5 for the holiday — please pick another date.</p>
           )}
