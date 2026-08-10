@@ -3,9 +3,16 @@ import Reviews from '@/components/Reviews';
 import BrandsSection from '@/components/BrandsSection';
 import { appliances } from '@/lib/data/appliances';
 import { cities } from '@/lib/data/cities';
+import { reviews } from '@/lib/data/reviews';
 import { CheckCircle, Clock, Users, Wrench } from 'lucide-react';
 import Link from 'next/link';
-import { generateLocalBusinessSchema, generateFAQSchema } from '@/lib/seo/schema';
+import {
+  generateLocalBusinessSchema,
+  generateFAQSchema,
+  generateServiceSchema,
+  generateBreadcrumbSchema,
+  generateReviewSchema,
+} from '@/lib/seo/schema';
 
 export const metadata = {
   alternates: {
@@ -26,6 +33,9 @@ const homepageFaqs = [
 export default function HomePage() {
   const localBusinessSchema = generateLocalBusinessSchema({});
   const faqSchema = generateFAQSchema(homepageFaqs);
+  const serviceSchema = generateServiceSchema({});
+  const breadcrumbSchema = generateBreadcrumbSchema({});
+  const reviewSchema = generateReviewSchema(reviews);
 
   return (
     <>
@@ -37,6 +47,18 @@ export default function HomePage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewSchema) }}
       />
 
       {/* Hero Section */}

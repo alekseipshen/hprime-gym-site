@@ -207,6 +207,34 @@ export function generateFAQSchema(faqs: { q: string; a: string }[]) {
   };
 }
 
+// One Review node per testimonial actually rendered on the page (see
+// components/Reviews.tsx). itemReviewed uses the same @id as the LocalBusiness
+// node so the graph merges rather than spawning a duplicate business entity.
+export function generateReviewSchema(
+  reviews: { author: string; text: string; rating?: number }[]
+) {
+  return reviews.map((review) => ({
+    '@context': 'https://schema.org',
+    '@type': 'Review',
+    itemReviewed: {
+      '@type': 'LocalBusiness',
+      '@id': `${SITE_URL}#business`,
+      name: BUSINESS_NAME,
+    },
+    author: {
+      '@type': 'Person',
+      name: review.author,
+    },
+    reviewRating: {
+      '@type': 'Rating',
+      ratingValue: String(review.rating ?? 5),
+      bestRating: '5',
+      worstRating: '1',
+    },
+    reviewBody: review.text,
+  }));
+}
+
 // Helper functions
 
 function generateBusinessDescription(params: SchemaParams): string {
