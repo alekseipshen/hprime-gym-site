@@ -85,7 +85,7 @@ export default async function ThankYouPage({
           </div>
 
           <p className="text-sm text-gray-500 mb-6">
-            Diagnostic fee is only $75 — waived if you proceed with the repair.
+            Diagnostic fee is only $99 — waived if you proceed with the repair.
           </p>
 
           <Link

@@ -105,9 +105,9 @@ export default function HomePage() {
                   <Users className="w-10 h-10" style={{ color: '#1B2A4A' }} />
                 </div>
               </div>
-              <h3 className="text-xl font-bold mb-3 text-gray-900">$75 Diagnostic Fee</h3>
+              <h3 className="text-xl font-bold mb-3 text-gray-900">$99 Diagnostic Fee</h3>
               <p className="text-gray-600">
-                Only $75 for a complete diagnostic — credited toward your repair if you proceed. No hidden fees, no surprises.
+                Only $99 for a complete diagnostic — credited toward your repair if you proceed. No hidden fees, no surprises.
               </p>
             </div>
             <div className="bg-white p-6 rounded-lg shadow-md text-center">
@@ -141,7 +141,7 @@ export default function HomePage() {
 
               <p className="text-base md:text-lg leading-relaxed">
                 Our factory-trained gym equipment technicians provide <strong>same-day service</strong> across the Denver Metro area —
-                Denver, Aurora, Lakewood, Arvada, and 30+ surrounding cities. Only $75 diagnostic fee, credited toward your repair.
+                Denver, Aurora, Lakewood, Arvada, and 30+ surrounding cities. Only $99 diagnostic fee, credited toward your repair.
               </p>
             </div>
           </div>
